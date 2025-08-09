@@ -1,0 +1,205 @@
+.loginContainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 60px 20px 40px;
+  position: relative;
+}
+
+.backButton {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.backButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+}
+
+.formContainer {
+  flex: 1;
+  background: white;
+  border-radius: 24px 24px 0 0;
+  padding: 40px 20px 20px;
+  margin-top: 20px;
+}
+
+.field {
+  margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.field :global(.rv-field__control) {
+  padding: 16px 12px;
+  font-size: 16px;
+  border: none;
+  background: #f8f9fa;
+}
+
+.field :global(.rv-field__left-icon) {
+  margin-left: 12px;
+  margin-right: 8px;
+  color: #666;
+}
+
+.errorMessage {
+  background: #fee;
+  color: #e74c3c;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border-left: 4px solid #e74c3c;
+}
+
+.loginButton {
+  height: 50px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+}
+
+.loginButton:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+.divider {
+  margin: 30px 0 20px;
+  color: #999;
+  font-size: 14px;
+}
+
+.quickLogin {
+  margin-bottom: 30px;
+}
+
+.toggleButton {
+  height: 40px;
+  border-radius: 12px;
+  font-size: 14px;
+  background: #f8f9fa;
+  color: #666;
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
+}
+
+.toggleButton:active {
+  background: #e9ecef;
+  transform: translateY(1px);
+}
+
+.demoAccounts {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 8px;
+}
+
+.demoAccount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.demoAccount:last-child {
+  margin-bottom: 0;
+}
+
+.accountInfo {
+  flex: 1;
+}
+
+.accountRole {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.accountDesc {
+  color: #666;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.accountCredentials {
+  color: #999;
+  font-size: 11px;
+  font-family: 'Courier New', monospace;
+}
+
+.quickLoginBtn {
+  height: 32px;
+  border-radius: 6px;
+  font-size: 12px;
+  min-width: 60px;
+}
+
+.notice {
+  margin: 20px 0;
+  border-radius: 8px;
+}
+
+.tips {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 20px;
+}
+
+.tips p {
+  margin: 0 0 8px;
+  color: #666;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.tips p:last-child {
+  margin-bottom: 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 375px) {
+  .formContainer {
+    padding: 30px 16px 16px;
+  }
+  
+  .header {
+    padding: 50px 16px 30px;
+  }
+  
+  .title {
+    font-size: 20px;
+  }
+}

@@ -1,0 +1,161 @@
+/* 社区页面样式 */
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 60px; /* 为底部导航留空间 */
+}
+
+/* 标签页区域 */
+.tabsSection {
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tabs {
+  /* React-Vant Tabs 样式覆盖 */
+}
+
+.tabs :global(.rv-tabs__nav) {
+  background: white;
+  padding: 0 16px;
+}
+
+.tabs :global(.rv-tab) {
+  font-size: 15px;
+  font-weight: 500;
+  color: #666;
+  padding: 12px 0;
+}
+
+.tabs :global(.rv-tab--active) {
+  color: #ff6b35;
+  font-weight: 600;
+}
+
+.tabs :global(.rv-tabs__line) {
+  background-color: #ff6b35;
+  height: 3px;
+  border-radius: 2px;
+}
+
+/* 文章列表区域 */
+.articlesSection {
+  padding: 12px 0;
+}
+
+/* 加载状态 */
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 12px;
+}
+
+.loadingText {
+  font-size: 14px;
+  color: #666;
+}
+
+/* 空状态 */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.emptyText {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.emptySubtext {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* 发布按钮 */
+.publishButton {
+  position: fixed;
+  bottom: 80px; /* 在底部导航上方 */
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8a50 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
+  transition: all 0.3s ease;
+  z-index: 100;
+  user-select: none;
+}
+
+.publishButton:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+}
+
+.publishButton:active {
+  transform: translateY(0) scale(0.95);
+}
+
+/* 移动端优化 */
+@media (max-width: 360px) {
+  .container {
+    padding-bottom: 60px;
+  }
+
+  .tabs :global(.rv-tabs__nav) {
+    padding: 0 12px;
+  }
+
+  .tabs :global(.rv-tab) {
+    font-size: 14px;
+    padding: 10px 0;
+  }
+
+  .articlesSection {
+    padding: 8px 0;
+  }
+
+  .publishButton {
+    width: 48px;
+    height: 48px;
+    bottom: 75px;
+    right: 16px;
+  }
+
+  .emptyState {
+    padding: 60px 16px;
+  }
+
+  .emptyIcon {
+    font-size: 48px;
+  }
+
+  .emptyText {
+    font-size: 16px;
+  }
+
+  .emptySubtext {
+    font-size: 13px;
+  }
+}
