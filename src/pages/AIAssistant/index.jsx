@@ -487,7 +487,7 @@ const AIAssistant = () => {
 
       {/* ActionSheet */}
       <ActionSheet
-        show={showActionSheet}
+        visible={showActionSheet}
         actions={actionSheetActions}
         onCancel={() => setShowActionSheet(false)}
         onSelect={(action) => {

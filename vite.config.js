@@ -17,4 +17,17 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  // 添加代理配置解决CORS问题
+server: {
+  proxy: {
+    '/api/coze': {
+      target: 'https://api.coze.cn',
+      changeOrigin: true,
+      rewrite: (path) => path.replace(/^\/api\/coze/, ''),
+      headers: {
+        'Origin': 'https://api.coze.cn'
+      }
+    }
+  }
+}
 });

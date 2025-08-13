@@ -22,6 +22,7 @@ import {
     ShareO
 } from '@react-vant/icons'
 import BottomNavigation from '@/components/BottomNavigation';
+import AvatarGenerator from '@/components/AvatarGenerator';
 import useAuthStore from '@/store/useAuthStore';
 import styles from './profile.module.css';
 
@@ -54,6 +55,7 @@ const Profile = () => {
     // 控制操作表和对话框显示
     const [showActionSheet, setShowActionSheet] = useState(false);
     const [showEditDialog, setShowEditDialog] = useState(false);
+    const [showAvatarGenerator, setShowAvatarGenerator] = useState(false);
     
     // 编辑用户信息的临时状态
     const [tempUserInfo, setTempUserInfo] = useState({...userInfo});
@@ -63,11 +65,20 @@ const Profile = () => {
         setShowActionSheet(false);
         
         if (action.name === 'AI生成头像') {
-            Toast.info('AI生成头像功能待实现');
+            setShowAvatarGenerator(true);
         } else if (action.name === '上传头像') {
             Toast.info('上传头像功能待实现');
         }
     }
+
+    // 处理AI生成头像成功回调
+    const handleAvatarGenerated = (avatarUrl) => {
+        // 更新用户头像
+        setUserInfo(prev => ({...prev, avatar: avatarUrl}));
+        // 更新store中的用户信息
+        updateUser({...user, avatar: avatarUrl});
+        setShowAvatarGenerator(false);
+    };
     
     // 操作选项
     const actions = [
@@ -212,6 +223,14 @@ const Profile = () => {
                     </div>
                 </div>
             </Dialog>
+
+            {/* AI头像生成器 */}
+            <AvatarGenerator
+                show={showAvatarGenerator}
+                onClose={() => setShowAvatarGenerator(false)}
+                onAvatarGenerated={handleAvatarGenerated}
+                userInfo={userInfo}
+            />
             
             <BottomNavigation />
         </div>

@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-vant/icons": "^0.1.0",
     "axios": "^1.11.0",
+    "fetch": "^1.1.0",
     "jsonwebtoken": "^9.0.2",
     "lib-flexible": "^0.3.2",
     "postcss-pxtorem": "^6.1.0",
