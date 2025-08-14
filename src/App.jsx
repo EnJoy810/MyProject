@@ -25,7 +25,19 @@ const PageLoading = () => (
 
 function App() {
   return (
-    <ConfigProvider>
+    <ConfigProvider
+      themeVars={{
+        primaryColor: '#ff6b35',
+        buttonPrimaryBackground: '#ff6b35',
+        buttonPrimaryBorderColor: '#ff6b35',
+        cardRadius: '8px',
+        borderColor: '#eeeeee',
+        textColor: '#222222',
+        textColor2: '#666666',
+        fontSizeMd: '14px',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.06)'
+      }}
+    >
       <div className="App">
         <BrowserRouter>
           <Suspense fallback={<PageLoading />}>

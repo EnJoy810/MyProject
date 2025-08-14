@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StarO } from '@react-vant/icons';
+import { UserO, LocationO, PhotoO, LikeO, ChatO, ShareO, MoreO } from '@react-vant/icons';
 import styles from './style.module.css';
 
 const ArticleCard = ({ article, onLike, onComment, onShare }) => {
@@ -47,7 +47,7 @@ const ArticleCard = ({ article, onLike, onComment, onShare }) => {
       <div className={styles.userHeader}>
         <div className={styles.userInfo} onClick={handleUserClick}>
           <div className={styles.avatar}>
-            {article.user.avatar}
+            <UserO size="18px" color="#8a8a8a" />
           </div>
           <div className={styles.userDetails}>
             <div className={styles.userName}>
@@ -61,14 +61,16 @@ const ArticleCard = ({ article, onLike, onComment, onShare }) => {
               {article.location && (
                 <>
                   <span className={styles.separator}>·</span>
-                  <span className={styles.location}>📍 {article.location}</span>
+                  <span className={styles.location}>
+                    <LocationO size="12px" color="#999" /> {article.location}
+                  </span>
                 </>
               )}
             </div>
           </div>
         </div>
         <div className={styles.moreButton} onClick={handleMore}>
-          <StarO size="18px" color="#999" />
+          <MoreO size="18px" color="#999" />
         </div>
       </div>
 
@@ -108,7 +110,9 @@ const ArticleCard = ({ article, onLike, onComment, onShare }) => {
                       ${['#357ABD', '#6BAF1A', '#D4941E', '#C73E1D'][index % 4]} 100%)`
                   }}
                 >
-                  <span className={styles.imageText}>IMG</span>
+                  <span className={styles.imageText} aria-label="image">
+                    <PhotoO size="16px" color="#ffffff" />
+                  </span>
                 </div>
               </div>
             ))}
@@ -119,7 +123,7 @@ const ArticleCard = ({ article, onLike, onComment, onShare }) => {
       {/* 互动按钮 */}
       <div className={styles.interactions}>
         <div className={styles.interactionButton} onClick={handleLike}>
-          <StarO 
+          <LikeO 
             size="20px" 
             color={isLiked ? "#ff6b35" : "#666"}
           />
@@ -129,12 +133,12 @@ const ArticleCard = ({ article, onLike, onComment, onShare }) => {
         </div>
 
         <div className={styles.interactionButton} onClick={handleComment}>
-          <StarO size="20px" color="#666" />
+          <ChatO size="20px" color="#666" />
           <span className={styles.interactionText}>{article.comments}</span>
         </div>
 
         <div className={styles.interactionButton} onClick={handleShare}>
-          <StarO size="20px" color="#666" />
+          <ShareO size="20px" color="#666" />
           <span className={styles.interactionText}>{article.shares}</span>
         </div>
       </div>

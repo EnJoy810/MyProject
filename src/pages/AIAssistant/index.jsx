@@ -4,22 +4,12 @@ import {
   useEffect,
   useCallback
 } from 'react';
-import { 
-  Button, 
-  Input, 
-  Loading, 
-  Toast,
-  ActionSheet,
-  Dialog,
-  SwipeCell
-} from 'react-vant';
-import { 
-  ArrowUp
-} from '@react-vant/icons';
+import { Button, Input, Loading, Toast, Dialog } from 'react-vant';
+import { ArrowUp } from '@react-vant/icons';
 import useTitle from '@/hooks/useTitle';
 import BottomNavigation from '@/components/BottomNavigation';
 import useAIChatStore from '@/store/useAIChatStore';
-import { shoppingAssistantChat, productRecommendationChat, priceComparisonChat } from '@/LLM';
+import { shoppingAssistantChat } from '@/LLM';
 import styles from './style.module.css';
 
 const AIAssistant = () => {
@@ -28,50 +18,15 @@ const AIAssistant = () => {
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [showActionSheet, setShowActionSheet] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
   const [inputHint, setInputHint] = useState('');
+  
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
   // 使用Zustand store
-  const {
-    messages,
-    history,
-    showHistory,
-    currentSessionId,
-    typingIndicator,
-    userPreferences,
-    addMessage,
-    setLoading,
-    setTypingIndicator,
-    startNewSession,
-    saveHistory,
-    toggleHistory,
-    loadHistorySession,
-    deleteHistory,
-    clearMessages,
-    clearAllHistory,
-    getMessageStats
-  } = useAIChatStore();
+  const { messages, currentSessionId, typingIndicator, addMessage, setLoading, setTypingIndicator, startNewSession, saveHistory, clearMessages } = useAIChatStore();
 
-  // 强调时效性的快速操作选项
-  const quickActions = [
-    { emoji: '🔥', text: '2024热门商品', prompt: '推荐2024年最新热门商品，预算3000元以内' },
-    { emoji: '📱', text: '最新手机推荐', prompt: '推荐2024年最新手机，预算2000-4000元' },
-    { emoji: '💰', text: '实时价格对比', prompt: 'iPhone 15最新价格对比' },
-    { emoji: '⚡', text: '新品分析', prompt: '2024年有哪些值得关注的新品？' },
-    { emoji: '📊', text: '产品对比分析', prompt: '对比分析不同品牌的产品优缺点' },
-    { emoji: '🎯', text: '今日最优推荐', prompt: '推荐当前性价比最高的数码产品，预算1000-3000元' }
-  ];
-
-  // 更多操作选项
-  const actionSheetActions = [
-    { name: '新建对话', action: () => handleNewSession() },
-    { name: '历史记录', action: () => toggleHistory() },
-    { name: '清空当前对话', action: () => handleClearMessages() },
-    { name: '导出对话', action: () => handleExportChat() },
-    { name: '设置', action: () => handleSettings() }
-  ];
+  // 去除快捷操作与更多菜单
 
   // 初始化会话
   useEffect(() => {
@@ -82,89 +37,23 @@ const AIAssistant = () => {
 
   // 滚动到底部
   const scrollToBottom = useCallback(() => {
-    if (userPreferences.autoScroll) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [userPreferences.autoScroll]);
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
-  // 智能意图识别
-  const detectUserIntent = (messageContent) => {
-    const content = messageContent.toLowerCase();
-    
-    // 商品推荐意图
-    if (content.includes('推荐') || content.includes('买什么') || content.includes('选择') || content.includes('哪个好')) {
-      // 提取商品类别
-      const categories = ['手机', '电脑', '笔记本', '耳机', '音响', '相机', '平板', '手表', '家电', '数码'];
-      const category = categories.find(cat => content.includes(cat)) || '';
-      
-      // 提取预算信息
-      const budgetMatch = content.match(/(\d+).*?元|(\d+).*?块|预算.*?(\d+)/);
-      const budget = budgetMatch ? `${budgetMatch[1] || budgetMatch[2] || budgetMatch[3]}元` : '';
-      
-      return { type: 'recommendation', category, budget };
+  // 极简发送逻辑：去掉意图分流与复杂重试，仅一次请求
+  const handleSendSimple = async (messageContent) => {
+    const messageHistory = messages.concat([{ role: 'user', content: messageContent }]);
+    const response = await shoppingAssistantChat(messageHistory);
+    if (response.code === 0) {
+      addMessage(response.data);
+      return true;
     }
-    
-    // 价格比较意图
-    if (content.includes('价格') || content.includes('多少钱') || content.includes('对比') || content.includes('便宜')) {
-      // 提取商品名称
-      const productMatch = content.match(/(.+?)(?:价格|多少钱|对比|便宜)/);
-      const productName = productMatch ? productMatch[1].trim() : '';
-      
-      return { type: 'price', productName };
-    }
-    
-    // 默认通用对话
-    return { type: 'general' };
-  };
-
-  // 智能重试机制 - 根据意图选择合适的API
-  const handleSendWithRetry = async (messageContent, retryAttempt = 0) => {
-    try {
-      const intent = detectUserIntent(messageContent);
-      const messageHistory = messages.concat([{ role: 'user', content: messageContent }]);
-      
-      let response;
-      
-      // 根据意图选择合适的API
-      switch (intent.type) {
-        case 'recommendation':
-          response = await productRecommendationChat(messageHistory, intent.category, intent.budget);
-          break;
-        case 'price':
-          response = await priceComparisonChat(messageHistory, intent.productName);
-          break;
-        default:
-          response = await shoppingAssistantChat(messageHistory);
-          break;
-      }
-      
-      if (response.code === 0) {
-        addMessage(response.data);
-        setRetryCount(0);
-        return true;
-      } else {
-        throw new Error(response.msg || 'API调用失败');
-      }
-    } catch (err) {
-      console.error('发送失败:', err);
-      
-      if (retryAttempt < 2) {
-        // 自动重试最多2次
-        Toast.info(`发送失败，正在重试... (${retryAttempt + 1}/2)`);
-        await new Promise(resolve => setTimeout(resolve, 1000 * (retryAttempt + 1))); // 递增延迟
-        return await handleSendWithRetry(messageContent, retryAttempt + 1);
-      } else {
-        // 重试失败后的处理
-        const errorMsg = err.message.includes('API') ? err.message : '网络连接错误，请检查网络后重试';
-        Toast.fail(errorMsg);
-        setRetryCount(retryAttempt + 1);
-        return false;
-      }
-    }
+    Toast.fail(response.msg || '发送失败');
+    return false;
   };
 
   const handleSend = async () => {
@@ -186,7 +75,7 @@ const AIAssistant = () => {
     setTypingIndicator(true);
     
     try {
-      const success = await handleSendWithRetry(messageContent);
+      const success = await handleSendSimple(messageContent);
       
       if (success && currentSessionId && messages.length > 0) {
         // 自动保存会话历史
@@ -234,14 +123,7 @@ const AIAssistant = () => {
     setInputHint(getInputHint(value));
   };
 
-  const handleQuickAction = (action) => {
-    setInput(action.prompt);
-    setInputHint('');
-    // 自动聚焦输入框
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
-  };
+  // 已移除快速操作
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -250,15 +132,9 @@ const AIAssistant = () => {
     }
   };
 
-  // 新建会话
+  // 简化：仅清空当前消息作为新对话
   const handleNewSession = () => {
-    if (currentSessionId && messages.length > 1) {
-      // 保存当前会话
-      saveHistory({
-        sessionId: currentSessionId,
-        messages: messages
-      });
-    }
+    clearMessages();
     startNewSession();
     setInput('');
     Toast.success('已创建新对话');
@@ -280,94 +156,21 @@ const AIAssistant = () => {
     });
   };
 
-  // 导出对话
-  const handleExportChat = () => {
-    if (messages.length === 0) {
-      Toast.info('当前没有对话内容');
-      return;
-    }
+  // 已移除导出功能
 
-    const chatContent = messages.map(msg => 
-      `${msg.role === 'user' ? '用户' : 'AI助手'}：${msg.content}`
-    ).join('\n\n');
-    
-    const blob = new Blob([chatContent], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `AI对话记录_${new Date().toLocaleDateString()}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    Toast.success('对话已导出');
-  };
-
-  // 设置
-  const handleSettings = () => {
-    Toast.info('设置功能开发中...');
-  };
+  // 已移除设置功能
 
   return (
     <div className={styles.container}>
-      {/* 顶部工具栏 */}
+      {/* 简化顶部，仅显示标题与新建按钮 */}
       <div className={styles.toolbar}>
-        <div className={styles.toolbarLeft}>
-          <span className={styles.sessionInfo}>
-            {currentSessionId ? `会话 ${messages.length - 1}条消息` : '新对话'}
-          </span>
-        </div>
+        <div className={styles.toolbarLeft}>AI 购物助手</div>
         <div className={styles.toolbarRight}>
-          <Button 
-            size="small" 
-            type="default"
-            onClick={() => setShowActionSheet(true)}
-            className={styles.toolbarButton}
-          >
-            ⚙️ 更多
-          </Button>
+          <Button size="small" type="default" onClick={handleNewSession} className={styles.toolbarButton}>新建对话</Button>
         </div>
       </div>
 
-      {/* 历史记录侧边栏 */}
-      {showHistory && (
-        <div className={styles.historyPanel}>
-          <div className={styles.historyHeader}>
-            <span>历史记录</span>
-            <Button size="small" onClick={toggleHistory}>✕</Button>
-          </div>
-          <div className={styles.historyList}>
-            {history.length === 0 ? (
-              <div className={styles.emptyHistory}>暂无历史记录</div>
-            ) : (
-              history.map((item) => (
-                <SwipeCell
-                  key={item.id}
-                  rightAction={
-                    <Button 
-                      square 
-                      type="danger" 
-                      text="删除"
-                      onClick={() => deleteHistory(item.id)}
-                    />
-                  }
-                >
-                  <div 
-                    className={styles.historyItem}
-                    onClick={() => loadHistorySession(item.id)}
-                  >
-                    <div className={styles.historyTitle}>{item.title}</div>
-                    <div className={styles.historyTime}>
-                      {new Date(item.updatedAt).toLocaleDateString()}
-                    </div>
-                  </div>
-                </SwipeCell>
-              ))
-            )}
-          </div>
-        </div>
-      )}
+      {/* 已移除历史记录侧边栏 */}
 
       {/* 聊天区域 */}
       <div className={styles.chatArea}>
@@ -400,7 +203,7 @@ const AIAssistant = () => {
         {/* 打字指示器 */}
         {typingIndicator && (
           <div className={styles.messageLeft}>
-            <div className={styles.messageAvatar}>🤖</div>
+            <div className={styles.messageAvatar} aria-label="assistant">AI</div>
             <div className={styles.messageContent}>
               <div className={styles.typingIndicator}>
                 <span></span>
@@ -415,27 +218,7 @@ const AIAssistant = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* 快速操作按钮 */}
-      {messages.length <= 1 && !isSending && (
-        <div className={styles.quickActionsArea}>
-          <div className={styles.quickActionsTitle}>🔥 2024年最新服务</div>
-          <div className={styles.timelinessNotice}>
-            ⏰ 专注提供最新产品信息，价格实时更新
-          </div>
-          <div className={styles.quickActionsGrid}>
-            {quickActions.map((action, index) => (
-              <div 
-                key={index} 
-                className={styles.quickActionButton}
-                onClick={() => handleQuickAction(action)}
-              >
-                <span className={styles.actionEmoji}>{action.emoji}</span>
-                <span className={styles.actionText}>{action.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* 已移除快速操作区域 */}
       
       {/* 输入区域 */}
       <div className={styles.inputArea}>
@@ -462,19 +245,9 @@ const AIAssistant = () => {
           </Button>
         </div>
         
-        {/* 智能输入提示 */}
-        {inputHint && (
-          <div className={styles.inputHint}>
-            {inputHint}
-          </div>
-        )}
+        {/* 已移除输入提示 */}
         
-        {/* 网络问题提示 */}
-        {retryCount > 0 && (
-          <div className={styles.networkHint}>
-            💡 网络不稳定？试试重新发送或检查网络连接
-          </div>
-        )}
+        {/* 网络问题提示（已简化，移除重试计数） */}
       </div>
       
       {/* 全局加载指示器 */}
@@ -485,17 +258,7 @@ const AIAssistant = () => {
         </div>
       )}
 
-      {/* ActionSheet */}
-      <ActionSheet
-        visible={showActionSheet}
-        actions={actionSheetActions}
-        onCancel={() => setShowActionSheet(false)}
-        onSelect={(action) => {
-          action.action();
-          setShowActionSheet(false);
-        }}
-        cancelText="取消"
-      />
+      {/* 已移除更多菜单 */}
       
       <BottomNavigation />
     </div>

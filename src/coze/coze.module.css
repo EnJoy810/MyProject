@@ -1,0 +1,118 @@
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: var(--tabbar-height, 60px);
+    background-color: #f5f5f5;
+    overflow-y: auto;
+}
+
+.content {
+    padding: 12px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.card {
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.preview {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.settings {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 12px;
+    gap: 12px;
+}
+
+.selection {
+    width: 100%;
+    text-align: left;
+}
+
+.selection input, .selection select {
+    height: 40px;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 14px;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.fileInput {
+    display: flex;
+    margin-bottom: 12px;
+}
+
+.output {
+    padding: 12px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.generate {
+    margin-top: 12px;
+}
+
+/* 调整生成按钮在移动端的触达区域 */
+.generate :global(.van-button) {
+    height: 44px;
+    border-radius: 8px;
+}
+
+.generated {
+    width: 100%;
+    min-height: 240px;
+    border: 1px dashed #e5e5e5;
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.output img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.status {
+    font-size: 14px;
+    color: #666;
+}
+
+.actions {
+    margin-top: 12px;
+    width: 100%;
+}
+
+/* 响应式布局：大屏左右分栏，小屏上下布局 */
+@media (min-width: 768px) {
+    .content {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+    }
+}

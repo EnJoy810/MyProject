@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Loading, Tabs } from 'react-vant';
-import { StarO } from '@react-vant/icons';
+import CardSkeleton from '@/components/Skeletons/Card.jsx';
+import { Plus } from '@react-vant/icons';
 import useTitle from '@/hooks/useTitle';
 import BottomNavigation from '@/components/BottomNavigation';
 import ArticleCard from './components/ArticleCard';
@@ -25,7 +26,7 @@ const Community = () => {
         verified: true
       },
       content: '刚入手了iPhone 15 Pro Max，拍照效果真的太惊艳了！尤其是夜景模式，比我之前的安卓旗舰强太多。分享几张样片给大家看看 📸✨',
-      images: ['#1', '#2', '#3'],
+      images: ['#1', '#2'],
       timestamp: '2小时前',
       likes: 128,
       comments: 23,
@@ -183,9 +184,10 @@ const Community = () => {
       {/* 文章列表 */}
       <div className={styles.articlesSection}>
         {loading && articles.length === 0 && (
-          <div className={styles.loadingContainer}>
-            <Loading size="24px" />
-            <span className={styles.loadingText}>正在加载...</span>
+          <div className={styles.articlesSection}>
+            {[...Array(5)].map((_, i) => (
+              <CardSkeleton key={`sk-article-${i}`} rows={4} />
+            ))}
           </div>
         )}
 
@@ -201,7 +203,7 @@ const Community = () => {
 
         {articles.length === 0 && !loading && (
           <div className={styles.emptyState}>
-            <div className={styles.emptyIcon}>📝</div>
+            <div className={styles.emptyIcon} aria-label="empty" />
             <div className={styles.emptyText}>暂无内容</div>
             <div className={styles.emptySubtext}>成为第一个分享的人吧</div>
           </div>
@@ -210,7 +212,7 @@ const Community = () => {
 
       {/* 发布按钮 */}
       <div className={styles.publishButton} onClick={handlePublish}>
-        <StarO size="24px" color="white" />
+        <Plus size="24px" color="#fff" />
       </div>
 
       {/* 底部导航 */}

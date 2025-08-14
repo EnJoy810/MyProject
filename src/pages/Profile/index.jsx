@@ -22,7 +22,6 @@ import {
     ShareO
 } from '@react-vant/icons'
 import BottomNavigation from '@/components/BottomNavigation';
-import AvatarGenerator from '@/components/AvatarGenerator';
 import useAuthStore from '@/store/useAuthStore';
 import styles from './profile.module.css';
 
@@ -55,7 +54,6 @@ const Profile = () => {
     // 控制操作表和对话框显示
     const [showActionSheet, setShowActionSheet] = useState(false);
     const [showEditDialog, setShowEditDialog] = useState(false);
-    const [showAvatarGenerator, setShowAvatarGenerator] = useState(false);
     
     // 编辑用户信息的临时状态
     const [tempUserInfo, setTempUserInfo] = useState({...userInfo});
@@ -63,10 +61,12 @@ const Profile = () => {
     // 处理头像操作
     const handleAction = (action) => {
         setShowActionSheet(false);
-        
-        if (action.name === 'AI生成头像') {
-            setShowAvatarGenerator(true);
-        } else if (action.name === '上传头像') {
+        if (action.type === 'preset' && action.value) {
+            const newUrl = action.value;
+            setUserInfo(prev => ({...prev, avatar: newUrl}));
+            updateUser({ ...user, avatar: newUrl });
+            Toast.success('头像已更新');
+        } else if (action.type === 'upload') {
             Toast.info('上传头像功能待实现');
         }
     }
@@ -77,21 +77,15 @@ const Profile = () => {
         setUserInfo(prev => ({...prev, avatar: avatarUrl}));
         // 更新store中的用户信息
         updateUser({...user, avatar: avatarUrl});
-        setShowAvatarGenerator(false);
+        // no-op
     };
     
     // 操作选项
     const actions = [
-        {
-            name: 'AI生成头像',
-            color: '#1989fa',
-            type: 1
-        },
-        {
-            name: '上传头像',
-            color: '#07c160',
-            type: 2
-        }
+        { name: '默认头像一', type: 'preset', value: 'https://picsum.photos/200/200?random=11' },
+        { name: '默认头像二', type: 'preset', value: 'https://picsum.photos/200/200?random=12' },
+        { name: '默认头像三', type: 'preset', value: 'https://picsum.photos/200/200?random=13' },
+        { name: '上传头像', type: 'upload', color: '#07c160' }
     ]
     
     // 统计数据
@@ -198,6 +192,7 @@ const Profile = () => {
             <ActionSheet
                 visible={showActionSheet}
                 actions={actions}
+                duration={200}
                 cancelText='取消'
                 onCancel={() => setShowActionSheet(false)}
                 onSelect={handleAction}
@@ -224,13 +219,7 @@ const Profile = () => {
                 </div>
             </Dialog>
 
-            {/* AI头像生成器 */}
-            <AvatarGenerator
-                show={showAvatarGenerator}
-                onClose={() => setShowAvatarGenerator(false)}
-                onAvatarGenerated={handleAvatarGenerated}
-                userInfo={userInfo}
-            />
+            {/* 已移除 AI 头像生成器，仅保留头像选择 */}
             
             <BottomNavigation />
         </div>

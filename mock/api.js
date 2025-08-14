@@ -1,4 +1,7 @@
-import { generateToken } from '../src/utils/jwt.js';
+import jwt from 'jsonwebtoken';
+
+// 仅用于本地开发 Mock 的密钥（请勿用于生产环境）
+const secret = '!&124coddefgg';
 
 // 简化的mock数据
 const users = {
@@ -16,7 +19,12 @@ export default [
       
       if (users[username] && password === '123456') {
         const user = users[username];
-        const token = generateToken({ userId: user.id, username });
+        // 使用 jsonwebtoken 签发带过期时间的 Token（1 天）
+        const token = jwt.sign(
+          { user },
+          secret,
+          { expiresIn: '1d' }
+        );
         
         return {
           code: 200,
@@ -40,6 +48,39 @@ export default [
       code: 200,
       message: '退出成功'
     })
+  },
+
+  // 受保护：获取当前用户信息（需要携带 Authorization: Bearer <token>）
+  {
+    url: '/api/user',
+    method: 'get',
+    response: (req) => {
+      const authHeader = req.headers?.authorization || '';
+      const token = authHeader.startsWith('Bearer ')
+        ? authHeader.slice(7)
+        : authHeader;
+
+      if (!token) {
+        return {
+          code: 401,
+          message: '未提供授权令牌'
+        };
+      }
+
+      try {
+        const decoded = jwt.verify(token, secret);
+        return {
+          code: 200,
+          data: decoded.user,
+          message: 'ok'
+        };
+      } catch (err) {
+        return {
+          code: 401,
+          message: '令牌无效或已过期'
+        };
+      }
+    }
   },
 
   // 获取商品列表

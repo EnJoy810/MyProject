@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Loading } from 'react-vant';
+import CardSkeleton from '@/components/Skeletons/Card.jsx';
 import ProductCard from '../ProductCard';
 import styles from './style.module.css';
 
@@ -16,7 +17,6 @@ const ProductList = () => {
       title: 'iPhone 15 Pro Max',
       categoryIcon: '📱',
       price: 9999,
-      originalPrice: 10999,
       rating: 4.8,
       sales: 1000,
       tags: ['热销', '新品']
@@ -26,7 +26,6 @@ const ProductList = () => {
       title: 'MacBook Pro M3',
       categoryIcon: '💻',
       price: 12999,
-      originalPrice: 13999,
       rating: 4.9,
       sales: 500,
       tags: ['官方直营']
@@ -36,7 +35,6 @@ const ProductList = () => {
       title: 'AirPods Pro 2',
       categoryIcon: '🎧',
       price: 1899,
-      originalPrice: 2199,
       rating: 4.7,
       sales: 2000,
       tags: ['无线充电', '降噪']
@@ -103,19 +101,38 @@ const ProductList = () => {
 
   return (
     <div className={styles.wrapper}>
+      {/* 初始骨架屏 */}
+      {products.length === 0 && loading && (
+        <>
+          <div className={styles.column}>
+            {[...Array(3)].map((_, i) => (
+              <CardSkeleton key={`sk-left-${i}`} />
+            ))}
+          </div>
+          <div className={styles.column}>
+            {[...Array(3)].map((_, i) => (
+              <CardSkeleton key={`sk-right-${i}`} />
+            ))}
+          </div>
+        </>
+      )}
       {/* 左列 - 偶数索引商品 */}
-      <div className={styles.column}>
-        {products.filter((_, i) => i % 2 === 0).map((product, index) => (
-          <ProductCard key={`left-${product.id}-${index}`} product={product} index={0} />
-        ))}
-      </div>
+      {!(products.length === 0 && loading) && (
+        <div className={styles.column}>
+          {products.filter((_, i) => i % 2 === 0).map((product, index) => (
+            <ProductCard key={`left-${product.id}-${index}`} product={product} index={0} />
+          ))}
+        </div>
+      )}
       
       {/* 右列 - 奇数索引商品 */}
-      <div className={styles.column}>
-        {products.filter((_, i) => i % 2 !== 0).map((product, index) => (
-          <ProductCard key={`right-${product.id}-${index}`} product={product} index={1} />
-        ))}
-      </div>
+      {!(products.length === 0 && loading) && (
+        <div className={styles.column}>
+          {products.filter((_, i) => i % 2 !== 0).map((product, index) => (
+            <ProductCard key={`right-${product.id}-${index}`} product={product} index={1} />
+          ))}
+        </div>
+      )}
       
       {/* 底部加载器 */}
       {hasMore && (

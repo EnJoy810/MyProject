@@ -39,7 +39,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ff6b6b 0%, #ffa502 100%);
+  background: #f0f0f0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,9 +47,9 @@
 }
 
 .avatarText {
-  color: white;
-  font-size: 14px;
-  font-weight: 600;
+  color: #666;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 /* 响应式适配 */

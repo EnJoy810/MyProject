@@ -34,22 +34,22 @@
 }
 
 .searchInput {
-  border-radius: 20px !important;
-  background-color: #f8f8f8 !important;
-  border: none !important;
-  padding: 8px 16px !important;
+  border-radius: 8px !important;
+  background-color: #f6f7f8 !important;
+  border: 1px solid #eee !important;
+  padding: 8px 12px !important;
   font-size: 14px !important;
 }
 
 .searchButton {
   flex-shrink: 0;
-  padding: 8px 16px;
+  padding: 8px 14px;
   background: #ff6b35;
-  color: white;
-  border-radius: 16px;
+  color: #fff;
+  border-radius: 8px;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.2s;
   user-select: none;
 }
 
@@ -122,9 +122,9 @@
 
 /* 热门标签高亮（前3个） */
 .hotTagHighlight {
-  background: linear-gradient(135deg, #ff6b35 0%, #ff8a50 100%);
-  color: white;
-  border-color: #ff6b35;
+  background: #fff4ef;
+  color: #ff6b35;
+  border-color: #ffe1d5;
   font-weight: 500;
 }
 
@@ -196,13 +196,13 @@
 }
 
 .backToHotButton {
-  padding: 10px 24px;
+  padding: 10px 20px;
   background: #ff6b35;
-  color: white;
-  border-radius: 20px;
+  color: #fff;
+  border-radius: 8px;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.2s;
   user-select: none;
 }
 

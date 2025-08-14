@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Input, Loading, Toast } from 'react-vant';
+import CardSkeleton from '@/components/Skeletons/Card.jsx';
 import { ArrowLeft, Close } from '@react-vant/icons';
 import useTitle from '@/hooks/useTitle';
 import SearchProductCard from './components/SearchProductCard';
@@ -41,7 +42,6 @@ const Search = () => {
       title: 'iPhone 15 Pro Max',
       categoryIcon: '📱',
       price: 9999,
-      originalPrice: 10999,
       rating: 4.8,
       sales: 1000,
       tags: ['热销', '新品'],
@@ -52,7 +52,6 @@ const Search = () => {
       title: 'MacBook Pro M3',
       categoryIcon: '💻',
       price: 12999,
-      originalPrice: 13999,
       rating: 4.9,
       sales: 500,
       tags: ['官方直营'],
@@ -63,7 +62,6 @@ const Search = () => {
       title: 'AirPods Pro 2',
       categoryIcon: '🎧',
       price: 1899,
-      originalPrice: 2199,
       rating: 4.7,
       sales: 2000,
       tags: ['无线充电', '降噪'],
@@ -248,9 +246,10 @@ const Search = () => {
       {hasSearched && (
         <div className={styles.searchResults}>
           {loading && (
-            <div className={styles.loadingContainer}>
-              <Loading size="24px" />
-              <span className={styles.loadingText}>正在搜索...</span>
+            <div className={styles.productGrid}>
+              {[...Array(6)].map((_, i) => (
+                <CardSkeleton key={`sk-${i}`} />
+              ))}
             </div>
           )}
 

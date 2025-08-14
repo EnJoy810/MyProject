@@ -1,9 +1,23 @@
 import React from 'react';
+import { StarO, LikeO, PhoneO, ServiceO } from '@react-vant/icons';
 import styles from './style.module.css';
 
 const SearchProductCard = ({ product, index }) => {
   const colors = ['#4A90E2', '#7ED321', '#F5A623']; // Blue, Green, Orange
   const bgColor = colors[index % colors.length];
+
+  const renderCategoryIcon = (icon) => {
+    switch (icon) {
+      case '📱':
+        return <PhoneO size="18px" color="#8a8a8a" />;
+      case '💻':
+        return <ServiceO size="18px" color="#8a8a8a" />;
+      case '🎧':
+        return <ServiceO size="18px" color="#8a8a8a" />;
+      default:
+        return <ServiceO size="18px" color="#8a8a8a" />;
+    }
+  };
 
   const handleCardClick = () => {
     console.log('Clicked product:', product.title);
@@ -25,7 +39,7 @@ const SearchProductCard = ({ product, index }) => {
           className={styles.productImage}
           style={{ backgroundColor: bgColor }}
         >
-          <span className={styles.imageText}>IMG</span>
+          <span className={styles.imageText} aria-label="image">IMG</span>
         </div>
       </div>
 
@@ -33,19 +47,22 @@ const SearchProductCard = ({ product, index }) => {
       <div className={styles.productInfo}>
         <div className={styles.productHeader}>
           <h3 className={styles.productTitle}>{product.title}</h3>
-          <div className={styles.categoryIcon}>{product.categoryIcon}</div>
+          <div className={styles.categoryIcon} aria-label="category">
+            {renderCategoryIcon(product.categoryIcon)}
+          </div>
         </div>
 
         <div className={styles.priceSection}>
-          <span className={styles.currentPrice}>¥{product.price}</span>
-          {product.originalPrice && (
-            <span className={styles.originalPrice}>¥{product.originalPrice}</span>
-          )}
+          <span className={styles.currentPrice}>¥{Number(product.price).toLocaleString('zh-CN')}</span>
         </div>
 
         <div className={styles.metaInfo}>
           <div className={styles.ratingSection}>
-            <span className={styles.stars}>⭐⭐⭐⭐⭐</span>
+            <span className={styles.stars}>
+              {[...Array(5)].map((_, i) => (
+                <StarO key={i} size="12px" color="#ffb400" />
+              ))}
+            </span>
             <span className={styles.rating}>{product.rating}</span>
           </div>
           <span className={styles.sales}>已售{product.sales}+</span>
@@ -67,7 +84,7 @@ const SearchProductCard = ({ product, index }) => {
           onClick={handleFavoriteClick}
           title="收藏"
         >
-          💗
+          <LikeO size="16px" color="#8a8a8a" />
         </button>
 
       </div>

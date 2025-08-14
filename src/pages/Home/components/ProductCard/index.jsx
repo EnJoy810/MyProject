@@ -1,4 +1,5 @@
 import React from 'react';
+import { StarO, LikeO } from '@react-vant/icons';
 import styles from './style.module.css';
 
 const ProductCard = ({ product, index }) => {
@@ -24,19 +25,20 @@ const ProductCard = ({ product, index }) => {
           className={styles.productImage}
           style={{ backgroundColor: bgColor }}
         >
-          <span className={styles.imageText}>IMG</span>
+          <span className={styles.imageText} aria-label="image">IMG</span>
         </div>
       </div>
       <div className={styles.productInfo}>
         <h3 className={styles.productTitle}>{product.title}</h3>
         <div className={styles.priceSection}>
-          <span className={styles.currentPrice}>¥{product.price}</span>
-          {product.originalPrice && (
-            <span className={styles.originalPrice}>¥{product.originalPrice}</span>
-          )}
+          <span className={styles.currentPrice}>¥{Number(product.price).toLocaleString('zh-CN')}</span>
         </div>
         <div className={styles.ratingSection}>
-          <span className={styles.stars}>⭐⭐⭐⭐⭐</span>
+          <span className={styles.stars}>
+            {[...Array(5)].map((_, i) => (
+              <StarO key={i} size="12px" color="#ffb400" />
+            ))}
+          </span>
           <span className={styles.rating}>{product.rating}</span>
         </div>
       </div>
@@ -48,7 +50,7 @@ const ProductCard = ({ product, index }) => {
             className={styles.favoriteBtn}
             onClick={handleFavoriteClick}
           >
-            💗
+            <LikeO size="16px" color="#8a8a8a" />
           </button>
 
         </div>

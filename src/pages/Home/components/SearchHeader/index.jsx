@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Search as SearchIcon, UserO } from '@react-vant/icons';
 import styles from './style.module.css';
 
 const SearchHeader = () => {
@@ -16,11 +17,11 @@ const SearchHeader = () => {
   return (
     <div className={styles.searchHeader}>
       <div className={styles.searchBox} onClick={handleSearchClick}>
-        <span className={styles.searchIcon}>🔍</span>
+        <SearchIcon size="16px" color="#999" className={styles.searchIcon} />
         <span className={styles.placeholder}>搜索你想要的商品</span>
       </div>
       <div className={styles.userAvatar} onClick={handleUserClick}>
-        <span className={styles.avatarText}>用</span>
+        <UserO size="16px" color="#666" />
       </div>
     </div>
   );

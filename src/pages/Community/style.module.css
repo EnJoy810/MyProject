@@ -94,27 +94,25 @@
   position: fixed;
   bottom: 80px; /* 在底部导航上方 */
   right: 20px;
-  width: 56px;
-  height: 56px;
-  background: linear-gradient(135deg, #ff6b35 0%, #ff8a50 100%);
-  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  background: #ff6b35;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
-  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: background-color 0.2s ease;
   z-index: 100;
   user-select: none;
 }
 
 .publishButton:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+  background: #ff5e24;
 }
 
 .publishButton:active {
-  transform: translateY(0) scale(0.95);
 }
 
 /* 移动端优化 */
