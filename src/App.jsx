@@ -5,7 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 // 懒加载页面组件
 const Home = React.lazy(() => import('./pages/Home'));
-const Community = React.lazy(() => import('./pages/Community')); // 改为社区页面
+const Community = React.lazy(() => import('./pages/Community'));
 const AIAssistant = React.lazy(() => import('./pages/AIAssistant'));
 const Profile = React.lazy(() => import('./pages/Profile'));
 const Search = React.lazy(() => import('./pages/Search'));

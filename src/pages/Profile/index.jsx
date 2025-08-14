@@ -50,6 +50,38 @@ const Profile = () => {
             });
         }
     }, [user]);
+
+    // 进入本页时禁用页面纵向滚动与回弹，离开时恢复
+    useEffect(() => {
+        const prevBodyOverflow = document.body.style.overflow;
+        const prevBodyPaddingBottom = document.body.style.paddingBottom;
+        const prevHtmlOverscroll = document.documentElement.style.overscrollBehavior;
+        const prevHtmlOverscrollY = document.documentElement.style.overscrollBehaviorY;
+
+        // 禁止滚动与回弹
+        document.body.style.overflow = 'hidden';
+        document.body.style.paddingBottom = '0px';
+        document.documentElement.style.overscrollBehavior = 'none';
+        document.documentElement.style.overscrollBehaviorY = 'none';
+
+        // 确保初始定位在顶部
+        const resetScroll = () => {
+            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        };
+        resetScroll();
+        if (typeof requestAnimationFrame === 'function') {
+            requestAnimationFrame(resetScroll);
+        }
+
+        return () => {
+            document.body.style.overflow = prevBodyOverflow;
+            document.body.style.paddingBottom = prevBodyPaddingBottom;
+            document.documentElement.style.overscrollBehavior = prevHtmlOverscroll;
+            document.documentElement.style.overscrollBehaviorY = prevHtmlOverscrollY;
+        };
+    }, []);
     
     // 控制操作表和对话框显示
     const [showActionSheet, setShowActionSheet] = useState(false);
