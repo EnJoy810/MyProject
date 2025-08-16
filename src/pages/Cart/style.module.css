@@ -1,0 +1,129 @@
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding-bottom: 140px; /* 为底部导航(60px) + 结算区(80px)留空间 */
+}
+
+.header {
+  background: #fff;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.backButton {
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.backButton:hover {
+  background: #f5f5f5;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.clearButton {
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.clearButton:hover {
+  background: #f5f5f5;
+}
+
+.content {
+  flex: 1;
+  position: relative;
+}
+
+.cartList {
+  padding: 16px;
+  padding-bottom: 16px; /* 简化，container 已经预留了空间 */
+}
+
+.checkoutSection {
+  position: fixed;
+  bottom: 60px; /* 底部导航高度 */
+  left: 0;
+  right: 0;
+  background: #fff;
+  padding: 16px;
+  border-top: 1px solid #eee;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 999; /* 确保在底部导航之下 */
+}
+
+.totalInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.totalItems {
+  font-size: 14px;
+  color: #666;
+}
+
+.totalPrice {
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.price {
+  color: #ff6b35;
+  font-size: 18px;
+}
+
+.checkoutButton {
+  width: 100%;
+  background: #ff6b35;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* 响应式适配 */
+@media (max-width: 360px) {
+  .header {
+    padding: 12px;
+  }
+  
+  .title {
+    font-size: 16px;
+  }
+  
+  .cartList {
+    padding: 12px;
+  }
+  
+  .checkoutSection {
+    padding: 12px;
+  }
+  
+  .totalPrice {
+    font-size: 14px;
+  }
+  
+  .price {
+    font-size: 16px;
+  }
+}

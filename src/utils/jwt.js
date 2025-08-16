@@ -1,6 +1,6 @@
 // 简化的JWT工具
 export const generateToken = (payload) => {
-  // 简单的token生成 (仅用于演示)
+  // 简单的token生成 
   const data = btoa(JSON.stringify({
     ...payload,
     exp: Date.now() + 24 * 60 * 60 * 1000 // 24小时过期

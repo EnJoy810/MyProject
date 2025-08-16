@@ -9,7 +9,7 @@ import { ArrowUp } from '@react-vant/icons';
 import useTitle from '@/hooks/useTitle';
 import BottomNavigation from '@/components/BottomNavigation';
 import useAIChatStore from '@/store/useAIChatStore';
-import { shoppingAssistantChat } from '@/LLM';
+import { shoppingChat } from '@/LLM';
 import styles from './style.module.css';
 
 const AIAssistant = () => {
@@ -47,7 +47,7 @@ const AIAssistant = () => {
   // 极简发送逻辑：去掉意图分流与复杂重试，仅一次请求
   const handleSendSimple = async (messageContent) => {
     const messageHistory = messages.concat([{ role: 'user', content: messageContent }]);
-    const response = await shoppingAssistantChat(messageHistory);
+    const response = await shoppingChat(messageHistory);
     if (response.code === 0) {
       addMessage(response.data);
       return true;

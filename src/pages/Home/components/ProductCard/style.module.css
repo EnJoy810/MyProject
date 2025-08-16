@@ -72,8 +72,6 @@
   color: #ff6b35;
 }
 
-/* 已移除原价显示 */
-
 .ratingSection {
   display: flex;
   align-items: center;
@@ -108,7 +106,8 @@
   gap: 8px;
 }
 
-.favoriteBtn {
+.favoriteBtn,
+.cartBtn {
   background: none;
   border: none;
   font-size: 16px;
@@ -118,13 +117,25 @@
   transition: all 0.2s ease;
 }
 
-.favoriteBtn:hover {
+.favoriteBtn:hover,
+.cartBtn:hover {
   background: #f5f5f5;
   transform: none;
 }
 
-.favoriteBtn:active {
+.favoriteBtn:active,
+.cartBtn:active {
   transform: none;
+}
+
+/* 购物车按钮已添加状态 */
+.cartBtn.inCart {
+  background: #fff4ef;
+  border: 1px solid #ffe1d5;
+}
+
+.cartBtn.inCart:hover {
+  background: #ffe1d5;
 }
 
 .tagsSection {

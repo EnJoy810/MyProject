@@ -77,7 +77,6 @@
     margin-top: 12px;
 }
 
-/* 调整生成按钮在移动端的触达区域 */
 .generate :global(.van-button) {
     height: 44px;
     border-radius: 8px;
@@ -90,6 +89,7 @@
     border-radius: 8px;
     position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }

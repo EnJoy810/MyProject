@@ -7,7 +7,6 @@ import styles from './style.module.css';
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
   const loader = useRef(null);
 
   // 基础的3个商品模板
@@ -59,21 +58,19 @@ const ProductList = () => {
 
   // 加载更多商品
   const fetchMore = useCallback(() => {
-    if (loading || !hasMore) return;
-    
+    if (loading) return;
+
     setLoading(true);
-    
+
     // 模拟API延迟
     setTimeout(() => {
       const currentLength = products.length;
       const newProducts = generateProducts(currentLength, 6); // 每次加载6个商品
       setProducts(prev => [...prev, ...newProducts]);
-      
-      // 真正的无限滚动 - 移除30个商品的限制
-      // hasMore 始终为 true，实现真正的无限滚动
+
       setLoading(false);
     }, 800);
-  }, [loading, hasMore, products.length]);
+  }, [loading, products.length]);
 
   // 设置Intersection Observer监听底部loader
   useEffect(() => {
@@ -134,17 +131,11 @@ const ProductList = () => {
         </div>
       )}
       
-      {/* 底部加载器 */}
-      {hasMore && (
-        <div ref={loader} className={styles.loader}>
-          {loading ? <Loading size="20px" /> : '加载中...'}
-        </div>
-      )}
+      {/* 底部加载器（无限滚动哨兵） */}
+      <div ref={loader} className={styles.loader}>
+        {loading && <Loading size="20px" />}
+      </div>
       
-      {/* 没有更多数据提示 */}
-      {!hasMore && products.length > 0 && (
-        <div className={styles.noMore}>— 没有更多商品了 —</div>
-      )}
     </div>
   );
 };

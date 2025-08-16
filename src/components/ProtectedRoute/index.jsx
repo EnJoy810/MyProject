@@ -40,34 +40,6 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
     );
   }
 
-  // 如果需要特定角色权限
-  if (requiredRole && user?.role !== requiredRole) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        flexDirection: 'column',
-        gap: '16px',
-        background: '#f5f5f5'
-      }}>
-        <div style={{ 
-          padding: '20px',
-          background: 'white',
-          borderRadius: '12px',
-          textAlign: 'center',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-        }}>
-          <h3 style={{ color: '#333', marginBottom: '8px' }}>权限不足</h3>
-          <p style={{ color: '#666', fontSize: '14px' }}>
-            您没有访问此页面的权限
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   // 如果已认证且有权限，渲染子组件
   return children;
 };

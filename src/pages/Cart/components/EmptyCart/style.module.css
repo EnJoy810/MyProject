@@ -1,0 +1,64 @@
+.emptyCart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  min-height: 60vh;
+}
+
+.emptyIcon {
+  font-size: 64px;
+  margin-bottom: 24px;
+  opacity: 0.6;
+}
+
+.emptyTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.emptySubtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+.goShoppingButton {
+  width: 200px;
+  background: #ff6b35;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* 响应式适配 */
+@media (max-width: 360px) {
+  .emptyCart {
+    padding: 60px 16px;
+  }
+  
+  .emptyIcon {
+    font-size: 48px;
+    margin-bottom: 20px;
+  }
+  
+  .emptyTitle {
+    font-size: 18px;
+  }
+  
+  .emptySubtitle {
+    font-size: 13px;
+    margin-bottom: 28px;
+  }
+  
+  .goShoppingButton {
+    width: 160px;
+    font-size: 14px;
+  }
+}

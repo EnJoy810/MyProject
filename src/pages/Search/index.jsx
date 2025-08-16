@@ -1,20 +1,13 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Input, Loading, Toast } from 'react-vant';
 import CardSkeleton from '@/components/Skeletons/Card.jsx';
 import { ArrowLeft, Close } from '@react-vant/icons';
 import useTitle from '@/hooks/useTitle';
+import useDebounce from '@/hooks/useDebounce';
+import useLocalStorage from '@/hooks/useLocalStorage';
 import SearchProductCard from './components/SearchProductCard';
 import styles from './style.module.css';
-
-// 防抖函数
-const debounce = (fn, delay) => {
-  let timeoutId;
-  return (...args) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => fn(...args), delay);
-  };
-};
 
 const Search = () => {
   useTitle('商品搜索');
@@ -26,8 +19,11 @@ const Search = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
-  const [searchHistory, setSearchHistory] = useState([]);
+  const [searchHistory, setSearchHistory] = useLocalStorage('search-history', []);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  
+  // 使用防抖 Hook，500ms 延迟
+  const debouncedQuery = useDebounce(query, 500);
 
   // 热门搜索词
   const hotSearches = [
@@ -107,7 +103,7 @@ const Search = () => {
       setSearchResults(results);
       setLoading(false);
 
-      // 保存搜索历史
+      // 保存搜索历史（自动持久化到 localStorage）
       if (searchQuery.trim()) {
         setSearchHistory(prev => {
           const newHistory = [searchQuery, ...prev.filter(item => item !== searchQuery)];
@@ -117,15 +113,16 @@ const Search = () => {
     }, 800);
   }, []);
 
-  // 防抖搜索
-  const debouncedSearch = useMemo(() => 
-    debounce(performSearch, 500), [performSearch]
-  );
-
-  // 监听查询变化
+  // 监听防抖后的查询变化，自动执行搜索
   useEffect(() => {
-    debouncedSearch(query);
-  }, [query, debouncedSearch]);
+    if (debouncedQuery) {
+      performSearch(debouncedQuery);
+    } else if (debouncedQuery === '') {
+      // 清空搜索结果
+      setSearchResults([]);
+      setHasSearched(false);
+    }
+  }, [debouncedQuery, performSearch]);
 
   // 初始搜索（如果有URL参数）
   useEffect(() => {
@@ -204,6 +201,7 @@ const Search = () => {
                   size="16px" 
                   color="#999" 
                   onClick={() => setSearchHistory([])}
+                  title="清空搜索历史"
                 />
               </div>
               <div className={styles.tagList}>

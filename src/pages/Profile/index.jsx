@@ -90,16 +90,11 @@ const Profile = () => {
     // 编辑用户信息的临时状态
     const [tempUserInfo, setTempUserInfo] = useState({...userInfo});
     
-    // 处理头像操作
+    // 处理头像操作 - 改为跳转到 AI 生成头像页面
     const handleAction = (action) => {
         setShowActionSheet(false);
-        if (action.type === 'preset' && action.value) {
-            const newUrl = action.value;
-            setUserInfo(prev => ({...prev, avatar: newUrl}));
-            updateUser({ ...user, avatar: newUrl });
-            Toast.success('头像已更新');
-        } else if (action.type === 'upload') {
-            Toast.info('上传头像功能待实现');
+        if (action.type === 'ai') {
+            navigate('/coze');
         }
     }
 
@@ -114,10 +109,7 @@ const Profile = () => {
     
     // 操作选项
     const actions = [
-        { name: '默认头像一', type: 'preset', value: 'https://picsum.photos/200/200?random=11' },
-        { name: '默认头像二', type: 'preset', value: 'https://picsum.photos/200/200?random=12' },
-        { name: '默认头像三', type: 'preset', value: 'https://picsum.photos/200/200?random=13' },
-        { name: '上传头像', type: 'upload', color: '#07c160' }
+        { name: 'AI生成头像', type: 'ai', color: '#07c160' }
     ]
     
     // 统计数据

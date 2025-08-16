@@ -1,10 +1,15 @@
 import React from 'react';
-import { StarO, LikeO } from '@react-vant/icons';
+import { StarO, LikeO, CartO } from '@react-vant/icons';
+import { Toast } from 'react-vant';
+import useCart from '@/hooks/useCart';
 import styles from './style.module.css';
 
 const ProductCard = ({ product, index }) => {
   const colors = ['#4A90E2', '#7ED321', '#F5A623']; // Blue, Green, Orange
   const bgColor = colors[index % colors.length];
+  
+  // 使用购物车 Hook
+  const { addToCart, isInCart, getItemQuantity } = useCart();
 
   const handleCardClick = () => {
     console.log('Clicked product:', product.title);
@@ -14,6 +19,13 @@ const ProductCard = ({ product, index }) => {
   const handleFavoriteClick = (e) => {
     e.stopPropagation(); // Prevent card click
     console.log('Favorited:', product.title);
+  };
+
+  // 添加到购物车
+  const handleAddToCart = (e) => {
+    e.stopPropagation(); // 防止触发卡片点击
+    addToCart(product, 1);
+    Toast.success('已添加');
   };
 
 
@@ -52,7 +64,18 @@ const ProductCard = ({ product, index }) => {
           >
             <LikeO size="16px" color="#8a8a8a" />
           </button>
-
+          
+          {/* 购物车按钮 */}
+          <button
+            className={`${styles.cartBtn} ${isInCart(product.id) ? styles.inCart : ''}`}
+            onClick={handleAddToCart}
+            title={isInCart(product.id) ? `已有${getItemQuantity(product.id)}件` : '加购物车'}
+          >
+            <CartO 
+              size="16px" 
+              color={isInCart(product.id) ? "#ff6b35" : "#8a8a8a"} 
+            />
+          </button>
         </div>
       </div>
 

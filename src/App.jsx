@@ -9,7 +9,9 @@ const Community = React.lazy(() => import('./pages/Community'));
 const AIAssistant = React.lazy(() => import('./pages/AIAssistant'));
 const Profile = React.lazy(() => import('./pages/Profile'));
 const Search = React.lazy(() => import('./pages/Search'));
+const Coze = React.lazy(() => import('./coze'));
 const Login = React.lazy(() => import('./pages/Login'));
+const Cart = React.lazy(() => import('./pages/Cart'));
 
 // 加载中组件
 const PageLoading = () => (
@@ -67,9 +69,21 @@ function App() {
                 </ProtectedRoute>
               } />
               
+              <Route path="/coze" element={
+                <ProtectedRoute>
+                  <Coze />
+                </ProtectedRoute>
+              } />
+              
               <Route path="/profile" element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/cart" element={
+                <ProtectedRoute>
+                  <Cart />
                 </ProtectedRoute>
               } />
               
